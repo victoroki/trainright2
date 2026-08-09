@@ -130,7 +130,7 @@ export default function HelpDesk() {
                       Topic
                     </label>
                     <select id="hd-topic" className="field" defaultValue="Login and password">
-                      {['Login and password', 'Payments and subscriptions', 'Lessons and quizzes', 'Assessments and results', 'Buy a Book orders', 'Trainer uploads', 'Other'].map((t) => (
+                      {['Login and password', 'Payments and subscriptions', 'Lessons and quizzes', 'Assessments and results', 'Trainer uploads', 'Other'].map((t) => (
                         <option key={t}>{t}</option>
                       ))}
                     </select>

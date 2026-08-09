@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import Icon from './Icon.jsx'
 import { SOCIALS } from '../data/site.js'
 import qrTrainright from '../images/qr-trainright.png'
+import logoTrainright from '../images/logo.png'
 
 export function GooglePlayIcon({ className = 'h-6 w-6' }) {
   return (
@@ -26,51 +27,21 @@ export function GooglePlayIcon({ className = 'h-6 w-6' }) {
   )
 }
 
-export function AppleIcon({ className = 'h-6 w-6' }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden="true" focusable="false" fill="currentColor">
-      <path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.48 2.208 3.133 3.792 3.07 1.511-.065 2.085-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.702z" />
-    </svg>
-  )
-}
-
-export function LogoMark({ size = 40 }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 40 40" role="img" aria-label="TrainRight logo">
-      <circle cx="20" cy="20" r="18.6" fill="#b80035" />
-      <circle cx="20" cy="20" r="18.6" fill="none" stroke="#0b1c30" strokeOpacity="0.18" strokeWidth="1.4" />
-      <path
-        d="M10.5 20.8l6.2 6.2L29.5 14"
-        fill="none"
-        stroke="#ffffff"
-        strokeWidth="3.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
-}
-
 export function Logo({ light = false }) {
+  const img = (
+    <img
+      src={logoTrainright}
+      alt="TrainRight Digital"
+      className={
+        light
+          ? 'h-9 w-auto max-w-full object-contain object-left sm:h-10 lg:h-11'
+          : 'h-10 w-auto max-w-[46vw] object-contain object-left sm:h-12 sm:max-w-none lg:h-12 xl:h-14'
+      }
+    />
+  )
   return (
-    <Link to="/" className="flex items-center gap-3" aria-label="TrainRight Technologies home">
-      <LogoMark />
-      <span className="leading-none">
-        <span
-          className={`block font-display text-[15px] font-extrabold tracking-wide ${
-            light ? 'text-white' : 'text-on-surface'
-          }`}
-        >
-          TRAINRIGHT
-        </span>
-        <span
-          className={`mt-1 block text-[10px] font-bold tracking-[0.32em] ${
-            light ? 'text-primary-fixed-dim' : 'text-secondary'
-          }`}
-        >
-          DIGITAL
-        </span>
-      </span>
+    <Link to="/" className="inline-flex items-center" aria-label="TrainRight Technologies home">
+      {light ? <span className="inline-flex rounded-lg bg-white px-4 py-2.5">{img}</span> : img}
     </Link>
   )
 }
@@ -81,7 +52,6 @@ export function SectionHeader({ eyebrow, title, lead, align = 'left', dark = fal
     <div className={`flex flex-col ${alignCls}`}>
       {eyebrow && (
         <span className="mb-3 inline-flex items-center gap-2 text-label-lg uppercase tracking-widest text-primary">
-          <span className="h-px w-6 bg-primary" aria-hidden="true" />
           {eyebrow}
         </span>
       )}
@@ -116,10 +86,11 @@ export function PageHero({ eyebrow, title, lead, icon }) {
         <Icon name={icon} className="text-[240px]" fill />
       </div>
       <div className="shell relative py-14 md:py-20">
-        <span className="mb-4 inline-flex items-center gap-2 text-label-lg uppercase tracking-widest text-primary-fixed-dim">
-          <span className="h-px w-6 bg-primary-container" aria-hidden="true" />
-          {eyebrow}
-        </span>
+        {eyebrow && (
+          <span className="mb-4 inline-flex items-center gap-2 text-label-lg uppercase tracking-widest text-primary-fixed-dim">
+            {eyebrow}
+          </span>
+        )}
         <h1 className="max-w-3xl font-display text-headline-lg-mobile text-white md:text-display-lg">{title}</h1>
         {lead && <p className="mt-5 max-w-2xl text-body-lg text-inverse-on-surface/85">{lead}</p>}
       </div>
@@ -135,46 +106,35 @@ export function StoreButtons({ className = '' }) {
         target="_blank"
         rel="noreferrer"
         aria-label="Get the TrainRight Digital App on Google Play"
-        className="flex items-center gap-3 rounded-lg bg-[#0b1c30] px-5 py-3 text-white transition-transform hover:scale-[1.03]"
+        className="flex items-center gap-2.5 rounded-lg bg-[#0b1c30] px-4 py-2.5 text-white transition-transform hover:scale-[1.03] sm:gap-3 sm:px-5 sm:py-3"
       >
-        <GooglePlayIcon className="h-7 w-7" />
+        <GooglePlayIcon className="h-6 w-6 sm:h-7 sm:w-7" />
         <span className="text-left">
           <span className="block text-[10px] uppercase leading-tight opacity-70">Get it on</span>
           <span className="block font-display text-sm font-bold">Google Play</span>
-        </span>
-      </a>
-      <a
-        href="https://www.apple.com/app-store/"
-        target="_blank"
-        rel="noreferrer"
-        aria-label="Download the TrainRight Digital App on the App Store"
-        className="flex items-center gap-3 rounded-lg bg-[#0b1c30] px-5 py-3 text-white transition-transform hover:scale-[1.03]"
-      >
-        <AppleIcon className="h-7 w-7" />
-        <span className="text-left">
-          <span className="block text-[10px] uppercase leading-tight opacity-70">Download on the</span>
-          <span className="block font-display text-sm font-bold">App Store</span>
         </span>
       </a>
     </div>
   )
 }
 
-export function QrCard({ compact = false }) {
+export function QrCard({ compact = false, caption = 'www.trainright.co.ke' }) {
   return (
     <div
-      className={`flex items-center gap-4 rounded-xl border border-outline-variant bg-white ${
-        compact ? 'p-3' : 'p-4'
+      className={`flex items-center gap-3 rounded-xl border border-outline-variant bg-white ${
+        compact ? 'p-3' : 'p-3 sm:p-4'
       } shadow-sm`}
     >
       <img
         src={qrTrainright}
         alt="QR code linking to www.trainright.co.ke"
-        className={`shrink-0 rounded border border-outline-variant ${compact ? 'h-16 w-16' : 'h-20 w-20'}`}
+        className={`shrink-0 rounded border border-outline-variant ${
+          compact ? 'h-16 w-16' : 'h-16 w-16 sm:h-20 sm:w-20'
+        }`}
       />
       <div>
         <p className="text-label-lg text-on-surface">Scan to Download</p>
-        <p className="mt-1 text-[11px] text-on-surface-variant">www.trainright.co.ke</p>
+        <p className="mt-1 text-[11px] text-on-surface-variant">{caption}</p>
       </div>
     </div>
   )
@@ -187,7 +147,7 @@ export function AdvertBanner({ title, lead, cta = 'Learn more', to = '/work-with
       <div aria-hidden="true" className="absolute -bottom-10 -right-6 text-white/15">
         <Icon name={icon} className="text-[160px]" fill />
       </div>
-      <div className="relative flex flex-col items-start gap-4 p-8 md:flex-row md:items-center md:justify-between md:p-10">
+      <div className="relative flex flex-col items-start gap-4 p-6 md:flex-row md:items-center md:justify-between md:p-10">
         <div className="max-w-xl">
           <span className="mb-3 inline-block rounded-full bg-white/15 px-3 py-1 text-label-md font-semibold uppercase tracking-wider">
             Sponsored

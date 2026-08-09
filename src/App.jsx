@@ -5,7 +5,6 @@ import Services from './pages/Services.jsx'
 import About from './pages/About.jsx'
 import RevisionAssessment from './pages/RevisionAssessment.jsx'
 import TeachersTrainers from './pages/TeachersTrainers.jsx'
-import BuyABook from './pages/BuyABook.jsx'
 import NewsEvents from './pages/NewsEvents.jsx'
 import WorkWithUs from './pages/WorkWithUs.jsx'
 import HelpDesk from './pages/HelpDesk.jsx'
@@ -25,7 +24,6 @@ export default function App() {
         <Route path="about" element={<About />} />
         <Route path="revision-assessment" element={<RevisionAssessment />} />
         <Route path="teachers-trainers" element={<TeachersTrainers />} />
-        <Route path="buy-a-book" element={<BuyABook />} />
         <Route path="news-and-events" element={<NewsEvents />} />
         <Route path="work-with-us" element={<WorkWithUs />} />
         <Route path="help-desk" element={<HelpDesk />} />

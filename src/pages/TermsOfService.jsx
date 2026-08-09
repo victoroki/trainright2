@@ -49,12 +49,6 @@ const SECTIONS = [
     ],
   },
   {
-    title: 'Buy a Book marketplace',
-    body: [
-      'Books and laptops are listed by independent sellers. The system enables direct payment via MPESA or bank card, and the buyer pays the delivery charge shown at checkout. Sellers are responsible for the accuracy of their listings and for dispatching orders.',
-    ],
-  },
-  {
     title: 'Acceptable use',
     body: ['You agree not to:'],
     list: [

@@ -5,27 +5,33 @@ import { CONTACT, PREHEADER_LINKS, SOCIALS } from '../../data/site.js'
 
 export default function Preheader() {
   return (
-    <section className="hidden bg-inverse-surface py-2 text-inverse-on-surface md:block">
-      <div className="shell flex items-center justify-between text-label-md">
-        <div className="flex items-center gap-6">
-          <a href={`tel:+254${CONTACT.phone.slice(1)}`} className="flex items-center gap-2 transition-colors hover:text-primary-fixed-dim">
-            <Icon name="call" className="text-sm" />
-            <span>Call Us: {CONTACT.phone}</span>
+    <section className="bg-inverse-surface text-inverse-on-surface">
+      <div className="shell flex items-center justify-between gap-2 py-1.5 text-[11px] sm:text-label-md">
+        <div className="flex min-w-0 items-center gap-2.5 sm:gap-5">
+          <a
+            href={`tel:+254${CONTACT.phone.slice(1)}`}
+            className="flex shrink-0 items-center gap-1 whitespace-nowrap transition-colors hover:text-primary-fixed-dim"
+          >
+            <Icon name="call" className="shrink-0 text-[1.1em]" />
+            <span>{CONTACT.phone}</span>
           </a>
-          <a href={`mailto:${CONTACT.email}`} className="flex items-center gap-2 transition-colors hover:text-primary-fixed-dim">
-            <Icon name="mail" className="text-sm" />
-            <span>{CONTACT.email}</span>
+          <a
+            href={`mailto:${CONTACT.email}`}
+            className="flex min-w-0 items-center gap-1 transition-colors hover:text-primary-fixed-dim"
+          >
+            <Icon name="mail" className="shrink-0 text-[1.1em]" />
+            <span className="truncate">{CONTACT.email}</span>
           </a>
         </div>
-        <div className="flex items-center gap-6">
-          <nav className="flex gap-5" aria-label="Quick">
+        <div className="flex min-w-0 shrink-0 items-center gap-2 sm:gap-4">
+          <nav className="hidden items-center gap-4 lg:flex" aria-label="Quick">
             {PREHEADER_LINKS.map((l) => (
-              <Link key={l.to} to={l.to} className="transition-colors hover:text-primary-fixed-dim">
+              <Link key={l.to} to={l.to} className="whitespace-nowrap transition-colors hover:text-primary-fixed-dim">
                 {l.label}
               </Link>
             ))}
           </nav>
-          <div className="flex gap-1.5" aria-label="Social media">
+          <div className="hidden items-center gap-1.5 xl:flex" aria-label="Social media">
             {SOCIALS.map((s) => (
               <a
                 key={s.label}
@@ -34,15 +40,15 @@ export default function Preheader() {
                 rel="noreferrer"
                 title={s.label}
                 aria-label={s.label}
-                className="flex h-6 w-6 items-center justify-center rounded-sm bg-white/10 text-white transition-colors hover:bg-primary-container"
+                className="flex h-7 w-7 items-center justify-center rounded-sm bg-white/10 text-white transition-colors hover:bg-primary-container"
               >
-                <SocialIcon platform={s.label} className="h-3 w-3" />
+                <SocialIcon platform={s.label} className="h-3.5 w-3.5" />
               </a>
             ))}
           </div>
           <Link
             to="/get-started"
-            className="rounded bg-primary-container px-4 py-1.5 font-bold text-on-primary-container transition-colors hover:bg-primary"
+            className="whitespace-nowrap rounded bg-primary-container px-3 py-1.5 font-bold text-on-primary-container transition-colors hover:bg-primary sm:px-4"
           >
             Get Started
           </Link>

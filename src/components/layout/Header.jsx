@@ -33,9 +33,9 @@ export default function Header() {
         scrolled ? 'shadow-[0_4px_12px_rgba(15,23,42,0.08)]' : ''
       }`}
     >
-      <div className="shell flex h-20 items-center justify-between gap-4">
+      <div className="shell flex h-16 items-center justify-between gap-4 sm:h-20">
         <Logo />
-        <nav className="hidden items-center gap-7 lg:flex" aria-label="Main">
+        <nav className="hidden items-center gap-4 lg:flex xl:gap-6" aria-label="Main">
           {NAV_MAIN.map((item) => (
             <NavLink key={item.to} to={item.to} end={item.to === '/'} className={linkCls}>
               {item.label}
@@ -43,7 +43,10 @@ export default function Header() {
           ))}
         </nav>
         <div className="flex items-center gap-3">
-          <Link to="/get-started" className="btn-primary !px-4 !py-2 lg:hidden">
+          <Link
+            to="/get-started"
+            className="btn-primary hidden !px-4 !py-2 sm:inline-flex lg:hidden"
+          >
             Get Started
           </Link>
           <button
@@ -65,7 +68,14 @@ export default function Header() {
         }`}
       >
         <div className="min-h-0">
-          <nav className="shell flex flex-col gap-1 py-4" aria-label="Mobile">
+          <nav className="shell flex max-h-[calc(100dvh-4rem)] flex-col gap-1 overflow-y-auto py-4" aria-label="Mobile">
+            <Link
+              to="/get-started"
+              className="mb-1 flex items-center justify-center gap-2 rounded bg-primary px-4 py-3 text-label-lg text-on-primary"
+            >
+              <Icon name="person_add" className="text-xl" />
+              Get Started
+            </Link>
             {NAV_MAIN.map((item) => (
               <NavLink
                 key={item.to}
@@ -80,7 +90,7 @@ export default function Header() {
                 {item.label}
               </NavLink>
             ))}
-            <div className="mt-3 grid grid-cols-2 gap-1 border-t border-outline-variant/60 pt-3">
+            <div className="mt-3 grid grid-cols-1 gap-1 border-t border-outline-variant/60 pt-3 sm:grid-cols-2">
               {PREHEADER_LINKS.map((l) => (
                 <NavLink key={l.to} to={l.to} className="rounded px-3 py-2.5 text-body-sm text-on-surface-variant hover:bg-surface-container">
                   {l.label}

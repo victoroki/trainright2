@@ -102,7 +102,7 @@ export default function ContactUs() {
                       Subject
                     </label>
                     <select id="ct-subject" className="field" defaultValue="General enquiry">
-                      {['General enquiry', 'Consultancy booking', 'Partnerships', 'Advertising', 'Selling on Buy a Book', 'Community projects'].map(
+                      {['General enquiry', 'Consultancy booking', 'Partnerships', 'Advertising', 'Community projects'].map(
                         (s) => (
                           <option key={s}>{s}</option>
                         ),

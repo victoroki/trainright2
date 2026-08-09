@@ -33,7 +33,7 @@ const SECTIONS = [
   {
     title: 'Sharing of information',
     body: [
-      'We do not sell personal data. We share only what is necessary: delivery details with a seller when you order on Buy a Book, payment confirmations with payment processors, and data with regulators where the law requires it.',
+      'We do not sell personal data. We share only what is necessary: payment confirmations with payment processors, and data with regulators where the law requires it.',
       'Teachers and trainers see learning activity only for students who access content they created.',
     ],
   },

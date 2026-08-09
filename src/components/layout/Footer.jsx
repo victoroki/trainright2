@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import Icon from '../Icon.jsx'
 import { Logo, SocialChips } from '../ui.jsx'
-import { CONTACT, PARTNERS } from '../../data/site.js'
+import { CONTACT } from '../../data/site.js'
 
 const QUICK_LINKS = [
   { label: 'Pods of Wisdom', to: '/' },
@@ -9,7 +9,6 @@ const QUICK_LINKS = [
   { label: 'Revision and assessment', to: '/revision-assessment' },
   { label: 'News and Events', to: '/news-and-events' },
   { label: 'Teachers and Trainers', to: '/teachers-trainers' },
-  { label: 'Buy a book', to: '/buy-a-book' },
 ]
 
 const POLICY_LINKS = [
@@ -56,17 +55,6 @@ export default function Footer() {
               </li>
             ))}
           </ul>
-          <h6 className="mb-3 mt-8 text-label-md uppercase tracking-widest text-inverse-on-surface/60">Our Partners</h6>
-          <div className="flex flex-wrap gap-2.5">
-            {PARTNERS.map((p) => (
-              <span
-                key={p}
-                className="flex h-8 items-center rounded bg-white/10 px-3 font-display text-[10px] font-bold uppercase tracking-wider text-white/60"
-              >
-                {p}
-              </span>
-            ))}
-          </div>
         </div>
 
         <div>

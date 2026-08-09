@@ -15,7 +15,6 @@ export const NAV_MAIN = [
   { label: 'About Us', to: '/about' },
   { label: 'Revision & Assessment', to: '/revision-assessment' },
   { label: 'Teachers & Trainers', to: '/teachers-trainers' },
-  { label: 'Buy a Book', to: '/buy-a-book' },
 ]
 
 export const PREHEADER_LINKS = [
@@ -38,8 +37,8 @@ export const SERVICES = [
   {
     icon: 'smart_display',
     title: 'Pods of Wisdom',
-    desc: 'Free, short, high-impact videos from our teachers and trainers, organized by area of study.',
-    access: 'Watch free on this page, or download the TrainRight Digital App for the full, personalized feed.',
+    desc: 'Short, high-impact videos from our teachers and trainers, organized by area of study. Some pods are free on the website.',
+    access: 'Watch free pods on this page, or download the TrainRight Digital App for the full, personalized feed.',
     to: '/',
   },
   {
@@ -102,8 +101,8 @@ export const SERVICES = [
     icon: 'draw',
     title: 'Stationery, Teaching and Learning Materials',
     desc: 'Quality academic essentials supplied directly to learners and institutions.',
-    access: 'Order through Buy a Book or request institutional supply via Contact Us.',
-    to: '/buy-a-book',
+    access: 'Request supply for your school or institution via Contact Us.',
+    to: '/contact-us',
   },
   {
     icon: 'school',
@@ -182,8 +181,8 @@ export const FAQS = [
     a: 'Select Forgot Password on the Get Started page and enter your account number. An OTP is sent to the phone number you used at registration, and you reset the password through the link sent to your email or SMS.',
   },
   {
-    q: 'Are the Pods of Wisdom really free?',
-    a: 'Yes. Pods of Wisdom are free, short videos of between 10 seconds and 5 minutes, on the website and in the TrainRight Digital App. Adverts appear alongside them to keep them free.',
+    q: 'Are the Pods of Wisdom free?',
+    a: 'Pods of Wisdom are free on the website. The full feed, lessons and assessments live in the app.',
   },
   {
     q: 'How do I pay for a subscription?',
@@ -200,10 +199,6 @@ export const FAQS = [
   {
     q: 'I am a teacher. How do I upload lessons?',
     a: 'Open a Teachers and Trainers account. For every complete paid lesson you upload, you also contribute a short free pod. All uploads are approved by the Chief Education Officer and the Chief Executive Officer before release.',
-  },
-  {
-    q: 'How does Buy a Book delivery work?',
-    a: 'Book and laptop sellers list items on the marketplace. You pay for the item plus delivery via MPESA or bank card at checkout, and the order is delivered to your address.',
   },
 ]
 
@@ -278,32 +273,5 @@ export const TEACHER_MATERIALS = [
   },
 ]
 
-export const BOOK_CATEGORIES = ['All', 'Pre-Primary', 'Primary', 'Junior School', 'Senior School', 'TVET', 'Teacher Education']
-
-export const PRODUCTS = [
-  { name: 'New Progressive Primary English GD 4', category: 'Primary', type: 'Book', price: 620, seller: 'Nairobi Text Books' },
-  { name: 'KLB Visionary Mathematics GD 7', category: 'Junior School', type: 'Book', price: 780, seller: 'KLB Store' },
-  { name: 'Spotlight Chemistry Form 4', category: 'Senior School', type: 'Book', price: 950, seller: 'Nairobi Text Books' },
-  { name: 'Fun with Language Activities PP1', category: 'Pre-Primary', type: 'Book', price: 480, seller: 'EduMart Kenya' },
-  { name: 'TVET Electrical Installation Level 5 Manual', category: 'TVET', type: 'Book', price: 1450, seller: 'SkillPress' },
-  { name: 'DSTE Educational Assessment Handbook', category: 'Teacher Education', type: 'Book', price: 1200, seller: 'SkillPress' },
-  { name: 'Fasihi ya Kiswahili GD 10', category: 'Senior School', type: 'Book', price: 690, seller: 'EduMart Kenya' },
-  { name: 'Agriculture Activities GD 5', category: 'Primary', type: 'Book', price: 560, seller: 'KLB Store' },
-]
-
-export const NEWS = [
-  { date: '12 Aug 2026', tag: 'Announcement', title: 'TrainRight Digital App launches on Google Play', excerpt: 'Learners can now download the app, register in minutes and access free Pods of Wisdom across all levels.' },
-  { date: '28 Aug 2026', tag: 'Webinar', title: 'Free KCSE Chemistry revision webinar', excerpt: 'A live session with our senior Chemistry trainers covering the mole concept and titration. Attendance is free for registered learners.' },
-  { date: '05 Sep 2026', tag: 'Community', title: 'Digital inclusion drive visits Machakos County', excerpt: 'The TrainRight Community Projects team donates learning devices and runs a digital literacy bootcamp for 400 learners.' },
-  { date: '19 Sep 2026', tag: 'Conference', title: 'National TVET trainers conference', excerpt: 'College trainers meet in Nairobi to align session plans and assessment tools with new occupational standards.' },
-]
-
-export const JOBS = [
-  { title: 'Mathematics Teacher (Commission-based)', dept: 'Teaching and Training', type: 'Commission', location: 'Remote', closing: '15 Aug 2026' },
-  { title: 'Digital Marketing Executive', dept: 'Commercial', type: 'Full time', location: 'Nairobi', closing: '22 Aug 2026' },
-  { title: 'Software Developer (React and Node)', dept: 'Technology', type: 'Full time', location: 'Nairobi', closing: '29 Aug 2026' },
-  { title: 'Customer Experience Executive', dept: 'Commercial', type: 'Full time', location: 'Nairobi', closing: '05 Sep 2026' },
-  { title: 'College Trainer, Electrical Installation', dept: 'Teaching and Training', type: 'Commission', location: 'Hybrid', closing: '12 Sep 2026' },
-]
-
-export const PARTNERS = ['KLB', 'EduMart', 'SkillPress', 'CompuWorld']
+// Add news and events entries here when they become available.
+export const NEWS = []

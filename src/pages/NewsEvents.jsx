@@ -10,7 +10,7 @@ function dateParts(dateStr) {
 
 export default function NewsEvents() {
   const [featured, ...rest] = NEWS
-  const f = dateParts(featured.date)
+  const f = featured ? dateParts(featured.date) : null
   return (
     <>
       <PageHero
@@ -22,16 +22,25 @@ export default function NewsEvents() {
 
       <section className="bg-surface py-16 md:py-20">
         <div className="shell">
-          {/* Featured */}
-          <article className="relative overflow-hidden rounded-xl bg-inverse-surface">
-            <div
-              aria-hidden="true"
-              className="absolute inset-0 opacity-[0.07]"
-              style={{
-                backgroundImage: 'radial-gradient(circle at 1px 1px, #eaf1ff 1px, transparent 0)',
-                backgroundSize: '26px 26px',
-              }}
-            />
+          {!featured && (
+            <div className="flex flex-col items-center gap-4 rounded-xl border border-dashed border-outline-variant bg-surface-container-lowest px-8 py-16 text-center">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-surface-container">
+                <Icon name="event" className="text-3xl text-secondary" />
+              </div>
+              <h2 className="font-display text-headline-md text-on-surface">Nothing here yet</h2>
+              <p className="max-w-md text-body-sm text-on-surface-variant">
+                Stay tuned — upcoming events, webinars, conferences and company news will be announced here.
+              </p>
+              <Link to="/get-started" className="btn-primary mt-2">
+                <Icon name="person_add" />
+                Get Started
+              </Link>
+            </div>
+          )}
+
+          {featured && (
+            <>
+              <article className="relative overflow-hidden rounded-xl bg-inverse-surface">
             <div className="relative grid grid-cols-1 gap-8 p-8 md:p-12 lg:grid-cols-[auto_1fr_auto] lg:items-center">
               <div className="flex h-24 w-24 flex-col items-center justify-center rounded-xl bg-primary text-white">
                 <span className="font-display text-3xl font-extrabold leading-none">{f.day}</span>
@@ -47,8 +56,8 @@ export default function NewsEvents() {
               <Link to="/get-started" className="btn-primary shrink-0">
                 Register to attend
               </Link>
-            </div>
-          </article>
+              </div>
+            </article>
 
           {/* All news */}
           <div className="mt-16">
@@ -96,6 +105,8 @@ export default function NewsEvents() {
               Get Started
             </Link>
           </div>
+          </>
+        )}
         </div>
       </section>
     </>

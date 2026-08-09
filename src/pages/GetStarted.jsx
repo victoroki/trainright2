@@ -548,7 +548,11 @@ export default function GetStarted() {
       />
       <section className="bg-surface py-16 md:py-20">
         <div className="shell max-w-5xl">
-          <div className="mb-8 inline-flex rounded-lg border border-outline-variant bg-surface-container-lowest p-1" role="tablist" aria-label="Account type">
+          <div
+            className="mb-8 flex flex-wrap rounded-lg border border-outline-variant bg-surface-container-lowest p-1"
+            role="tablist"
+            aria-label="Account type"
+          >
             {[
               { id: 'learner', label: 'Learner', icon: 'school' },
               { id: 'trainer', label: 'Teacher / Trainer', icon: 'co_present' },
@@ -559,7 +563,7 @@ export default function GetStarted() {
                 role="tab"
                 aria-selected={role === t.id}
                 onClick={() => setParams(t.id === 'learner' ? {} : { role: 'trainer' })}
-                className={`inline-flex items-center gap-2 rounded-md px-5 py-2.5 text-label-lg transition-colors ${
+                className={`inline-flex flex-1 items-center justify-center gap-2 rounded-md px-5 py-2.5 text-label-lg transition-colors sm:flex-none ${
                   role === t.id ? 'bg-primary text-on-primary' : 'text-on-surface-variant hover:text-primary'
                 }`}
               >

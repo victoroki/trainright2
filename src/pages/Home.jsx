@@ -41,8 +41,8 @@ export default function Home() {
     <>
       {/* Hero: app download, QR code and high-level advert widgets */}
       <section className="relative overflow-hidden bg-surface-container-low py-16 md:py-24">
-        <div className="shell grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
-          <div className="relative z-10">
+        <div className="shell grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-12">
+          <div className="relative z-10 order-2 lg:order-1">
             <h1 className="mb-6 font-display text-headline-lg-mobile text-on-surface md:text-display-lg">
               The TrainRight Digital App
             </h1>
@@ -51,16 +51,20 @@ export default function Home() {
               Available on Android now.
             </p>
             <div className="flex flex-col gap-8 sm:flex-row sm:items-center">
-              <StoreButtons />
-              <QrCard />
+              <div className="order-2 sm:order-1">
+                <StoreButtons />
+              </div>
+              <div className="order-1 sm:order-2">
+                <QrCard caption="TrainRight Digital App" />
+              </div>
             </div>
             <p className="mt-8 flex items-center gap-2 text-body-sm text-on-surface-variant">
-              <Icon name="info" className="text-lg text-secondary" />
+              <Icon name="info" className="shrink-0 text-lg text-secondary" />
               Pods of Wisdom are free on the website. The full feed, lessons and assessments live in the app.
             </p>
           </div>
 
-          <div className="relative flex items-center justify-center lg:h-[620px]">
+          <div className="relative order-1 flex items-center justify-center lg:order-2 lg:h-[620px]">
             {/* Soft blue disc behind the slanted mockup */}
             <div
               aria-hidden="true"
@@ -78,7 +82,7 @@ export default function Home() {
             <img
               src={phoneBg}
               alt="TrainRight Digital App registration: select your level, set a nickname and a 4-digit PIN"
-              className="relative h-[400px] w-auto sm:h-[480px] lg:h-[560px]"
+              className="relative h-[300px] w-auto sm:h-[420px] md:h-[500px] lg:h-[560px]"
             />
           </div>
         </div>
@@ -90,7 +94,7 @@ export default function Home() {
           <div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end">
             <SectionHeader
               title="Pods of Wisdom"
-              lead="Free, short videos by our teachers, organized by subject. Each pod runs 10 seconds to 5 minutes."
+              lead="Short videos by our teachers, organized by subject. Some pods are free on the website. Each pod runs 10 seconds to 5 minutes."
             />
             <Link to="/get-started" className="inline-flex shrink-0 items-center gap-2 text-label-lg text-secondary hover:underline">
               View All Categories
@@ -242,7 +246,7 @@ export default function Home() {
                 </h2>
                 <ul className="mt-6 space-y-3 text-body-md text-white/90">
                   {[
-                    'Free Pods of Wisdom, personalized to your subjects',
+                    'Pods of Wisdom, personalized to your subjects',
                     'Lessons with auto-marked quizzes and instant results',
                     'Revision schedules, assessments and certificates in PDF',
                   ].map((f) => (
