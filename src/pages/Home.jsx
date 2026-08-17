@@ -1,8 +1,8 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
 import { AdvertBanner, QrCard, SectionHeader, StoreButtons } from '../components/ui.jsx'
-import { LEVEL_GROUPS, POD_CATEGORIES, POD_VIDEOS, SERVICES } from '../data/site.js'
+import { LEVEL_GROUPS, POD_VIDEOS, SERVICES } from '../data/site.js'
 import heroImage from '../images/hero.png'
 
 function PodCard({ pod }) {
@@ -117,28 +117,12 @@ function PodAdCard() {
 
 export default function Home() {
   const levels = LEVEL_GROUPS.flatMap((g) => g.levels)
-  const [filter, setFilter] = useState('All')
-
-  const filteredPods = useMemo(
-    () => (filter === 'All' ? POD_VIDEOS : POD_VIDEOS.filter((p) => p.subject === filter)),
-    [filter],
-  )
-
-  // One random ad per filtered result set, guaranteed in the most-viewed filter.
-  const podItems = useMemo(
-    () => withAds(filteredPods, 1, (p) => p.subject === MOST_VIEWED_SUBJECT),
-    [filteredPods],
-  )
 
   // Trending feed: a single ad, at a random position.
   const trendingItems = useMemo(() => withAds(POD_VIDEOS.slice(0, 6), 1, (p) => p.subject === MOST_VIEWED_SUBJECT), [])
 
   // Limited preview: first 4 pods, no ads
   const previewPods = POD_VIDEOS.slice(0, 4)
-
-  const scrollToPods = () => {
-    document.getElementById('pods-filters')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
 
   return (
     <>
@@ -163,10 +147,10 @@ export default function Home() {
               Kenya&apos;s learners, educators, and institutions.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-4">
-              <button type="button" onClick={scrollToPods} className="btn-primary">
+              <Link to="/pods" className="btn-primary">
                 <Icon name="smart_display" className="text-lg" />
                 Explore Pods of Wisdom
-              </button>
+              </Link>
               <Link
                 to="/revision-assessment"
                 className="inline-flex min-h-11 items-center gap-2 rounded border border-white/25 px-5 py-2.5 text-label-lg text-white transition-[background-color,border-color,transform] duration-200 ease-out hover:bg-white/10 hover:border-white/40 active:scale-[0.97]"
@@ -204,74 +188,15 @@ export default function Home() {
               title="Pods of Wisdom"
               lead="Short videos by our teachers, organized by subject. Each pod runs 10 seconds to 5 minutes."
             />
-            <button type="button" onClick={scrollToPods} className="btn-secondary shrink-0">
+            <Link to="/pods" className="btn-secondary shrink-0">
               <Icon name="smart_display" />
               Explore all Pods
-            </button>
+            </Link>
           </div>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {previewPods.map((pod) => (
               <PodCard key={pod.title} pod={pod} />
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Pods of Wisdom — full filterable view with sticky filter bar */}
-      <section id="pods-filters" className="scroll-mt-24">
-        {/* Sticky filter bar — dark, matching the reference site */}
-        <div className="sticky top-[96px] z-30 border-b border-white/8 bg-inverse-surface py-4 md:top-[112px]">
-          <div className="shell">
-            <div className="flex items-center gap-3 overflow-x-auto pb-1">
-              <span className="shrink-0 text-label-md font-medium text-inverse-on-surface/40">Filter:</span>
-              {POD_FILTERS.map((f) => (
-                <button
-                  key={f}
-                  type="button"
-                  onClick={() => setFilter(f)}
-                  aria-pressed={filter === f}
-                  className={`shrink-0 rounded px-3 py-1.5 text-label-md font-semibold transition-[background-color,color,transform] duration-200 ease-out active:scale-[0.97] ${
-                    filter === f
-                      ? 'bg-primary text-on-primary'
-                      : 'border border-white/10 bg-white/5 text-inverse-on-surface/50 hover:border-white/20 hover:text-white'
-                  }`}
-                >
-                  {f}
-                  {f === MOST_VIEWED_SUBJECT && (
-                    <span className="ml-1.5 rounded bg-white/15 px-1.5 py-0.5 text-[9px] font-bold uppercase">
-                      Popular
-                    </span>
-                  )}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Pod grid — dark background matching reference */}
-        <div className="bg-inverse-surface py-14">
-          <div className="shell">
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {podItems.map((it) =>
-                it.type === 'ad' ? (
-                  <PodAdCard key={it.key} />
-                ) : (
-                  <PodCard key={it.item.title} pod={it.item} />
-                ),
-              )}
-            </div>
-
-            {/* Teacher CTA */}
-            <div className="mt-16 bg-primary p-8 text-center">
-              <h3 className="font-display text-headline-md font-bold uppercase text-white">Are you a teacher or trainer?</h3>
-              <p className="mt-2 text-body-sm text-white/65">
-                Upload your own pods and reach thousands of Kenyan learners. Subject to verification and content review.
-              </p>
-              <Link to="/teachers-trainers" className="mt-5 inline-flex items-center gap-2 bg-white px-6 py-3 font-bold uppercase tracking-wide text-primary transition-colors hover:bg-white/90">
-                <Icon name="co_present" className="text-base" />
-                Apply to upload content
-              </Link>
-            </div>
           </div>
         </div>
       </section>
