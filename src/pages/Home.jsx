@@ -46,10 +46,7 @@ function PodCard({ pod }) {
 export default function Home() {
   const levels = LEVEL_GROUPS.flatMap((g) => g.levels)
 
-  // Trending: next 3 pods after the preview, no ads
-  const trendingPods = POD_VIDEOS.slice(4, 7)
-
-  // Limited preview: first 4 pods, no ads
+  // Limited preview: first 4 pods
   const previewPods = POD_VIDEOS.slice(0, 4)
 
   return (
@@ -123,23 +120,6 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {previewPods.map((pod) => (
-              <PodCard key={pod.title} pod={pod} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Trending pods feed */}
-      <section className="border-y border-outline-variant/70 bg-surface-container-low py-16 md:py-20">
-        <div className="shell">
-          <div className="mb-10 flex flex-col justify-between gap-6 md:flex-row md:items-end">
-            <Link to="/pods" className="btn-secondary shrink-0">
-              <Icon name="smart_display" />
-              View all Pods
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {trendingPods.map((pod) => (
               <PodCard key={pod.title} pod={pod} />
             ))}
           </div>
