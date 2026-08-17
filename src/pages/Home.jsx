@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
-import { QrCard, SectionHeader, StoreButtons } from '../components/ui.jsx'
+import { QrCard, AdvertBanner, SectionHeader, StoreButtons } from '../components/ui.jsx'
 import { LEVEL_GROUPS, POD_VIDEOS, SERVICES } from '../data/site.js'
 import heroImage from '../images/hero.png'
 
@@ -163,6 +163,18 @@ export default function Home() {
               </span>
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* Advertise banner */}
+      <section className="bg-surface py-16 md:py-20">
+        <div className="shell">
+          <AdvertBanner
+            title="Put your education brand in front of 50,000+ learners"
+            lead="Priority adverts appear here, in the app feed and across Pods of Wisdom. Book a slot with our commercial team."
+            cta="Advertise with us"
+            to="/get-started?role=schools"
+          />
         </div>
       </section>
 
