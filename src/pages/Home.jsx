@@ -133,10 +133,6 @@ export default function Home() {
       <section className="border-y border-outline-variant/70 bg-surface-container-low py-16 md:py-20">
         <div className="shell">
           <div className="mb-10 flex flex-col justify-between gap-6 md:flex-row md:items-end">
-            <SectionHeader
-              title="Trending Pods"
-              lead="The most-watched pods across all subjects this week."
-            />
             <Link to="/pods" className="btn-secondary shrink-0">
               <Icon name="smart_display" />
               View all Pods
