@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
-import { PageHero } from '../components/ui.jsx'
-import { LEVEL_GROUPS } from '../data/site.js'
+import { AdvertEnquiryInline } from '../components/AdvertEnquiry.jsx'
+import { CONTACT, LEVEL_GROUPS } from '../data/site.js'
 
 const ACCOUNT_RE = /^[KLMNPQ]\d{6}$/i
 
@@ -158,7 +158,7 @@ function LearnerPanel() {
   ]
 
   return (
-    <div className="rounded-xl border border-outline-variant bg-surface-container-lowest p-6 md:p-8">
+    <div className="rounded-2xl border border-outline-variant bg-surface-container-lowest p-6 shadow-sm md:p-8">
       {result?.account ? (
         <SuccessPanel
           account={result.account}
@@ -199,10 +199,10 @@ function LearnerPanel() {
                   setErrors({})
                   setForgotSent(false)
                 }}
-                className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-label-lg transition-colors ${
+                className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-label-lg font-semibold transition-[background-color,color,transform] duration-200 ease-out active:scale-[0.97] ${
                   mode === t.id
-                    ? 'bg-primary text-on-primary'
-                    : 'border border-outline-variant text-on-surface hover:border-primary hover:text-primary'
+                    ? 'bg-inverse-surface text-white shadow-lift'
+                    : 'border border-outline-variant text-on-surface-variant hover:border-primary/50 hover:text-primary hover:bg-surface-container-low'
                 }`}
               >
                 <Icon name={t.icon} className="text-base" />
@@ -423,6 +423,35 @@ function LearnerPanel() {
   )
 }
 
+function SchoolsPanel() {
+  return (
+    <div className="rounded-2xl border border-outline-variant bg-surface-container-lowest p-6 shadow-sm md:p-8">
+      <div className="mb-6 max-w-2xl">
+        <h3 className="font-display text-headline-md text-on-surface">Schools and Colleges</h3>
+        <p className="mt-2 text-body-md text-on-surface-variant">
+          Create an advertising account to promote your school, college or education brand to learners, teachers
+          and institutions on TrainRight.
+        </p>
+      </div>
+      <AdvertEnquiryInline />
+      <div className="mt-8 flex flex-col items-start gap-3 rounded-xl border border-outline-variant bg-surface-container-low p-5">
+        <p className="text-body-sm text-on-surface-variant">
+          Already have an advertising account? Sign in to manage your adverts.
+        </p>
+        <a
+          href={CONTACT.learnerPortal}
+          target="_blank"
+          rel="noreferrer"
+          className="btn-secondary"
+        >
+          <Icon name="login" className="text-base" />
+          Sign in to your account
+        </a>
+      </div>
+    </div>
+  )
+}
+
 function TrainerPanel() {
   const [staffNo, setStaffNo] = useState('')
   const [password, setPassword] = useState('')
@@ -445,7 +474,7 @@ function TrainerPanel() {
 
   return (
     <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-      <div className="rounded-xl border border-outline-variant bg-surface-container-lowest p-6 md:p-8">
+      <div id="trainer-sign-in" className="rounded-2xl border border-outline-variant bg-surface-container-lowest p-6 shadow-sm md:p-8">
         {ok ? (
           <div className="flex flex-col items-start gap-4">
             <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary-fixed">
@@ -501,18 +530,22 @@ function TrainerPanel() {
         )}
       </div>
 
-      <div className="rounded-xl bg-inverse-surface p-6 md:p-8">
+      <div className="rounded-2xl bg-inverse-surface p-6 md:p-8">
         <h3 className="font-display text-headline-sm text-white">New teacher or trainer?</h3>
         <p className="mt-2 text-body-sm text-inverse-on-surface/80">
           Staff accounts are created by HR after your documents are verified. Here is the journey:
         </p>
         <ol className="mt-6 space-y-4">
           {[
-            'Submit your documents in hard and soft copy to HR.',
-            'HR assigns your staff number (4 digits + year of joining) and the system assigns your marketing number.',
-            'IT opens your account. An activation link is sent to your phone.',
-            'Create your password, read and accept the terms of employment, then sign and return the printed copies to HR.',
-            'Start uploading lessons, pods and assessments from your staff account.',
+            'Click on "Create Account" button below',
+            'Fill in the required details, upload application documents in soft copy.',
+            'Fill in the consent form and submit your Account Creation request for review.',
+            'HR assigns your staff number (4 digits + year of joining) and the system assigns your marketing number/Promo Code.',
+            'An activation link is sent to your email.',
+            'Create your password, read and accept the terms of employment, then sign and return the printed copies to HR. Your account is then activated.',
+            'Start uploading lessons, pods of wisdom and assessments from your staff account.',
+            'Use your promo account number to invite students to TrainRight Digital.',
+            'Start earning commissions for the lessons, assessments and student referrals.',
           ].map((step, i) => (
             <li key={step} className="flex gap-3 text-body-sm text-inverse-on-surface">
               <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary font-display text-[11px] font-bold text-white">
@@ -522,13 +555,23 @@ function TrainerPanel() {
             </li>
           ))}
         </ol>
-        <Link
-          to="/work-with-us"
-          className="mt-7 inline-flex items-center gap-2 rounded border border-white/30 px-5 py-2.5 text-label-lg text-white transition-colors hover:bg-white/10"
-        >
-          <Icon name="work" className="text-base" />
-          See open teaching roles
-        </Link>
+        <div className="mt-7 flex flex-wrap gap-3">
+          <button
+            type="button"
+            onClick={() => document.getElementById('trainer-sign-in')?.scrollIntoView({ behavior: 'smooth', block: 'center' })}
+            className="btn-primary"
+          >
+            <Icon name="person_add" className="text-base" />
+            Create Account
+          </button>
+          <Link
+            to="/work-with-us"
+            className="inline-flex items-center gap-2 rounded border border-white/30 px-5 py-2.5 text-label-lg text-white transition-colors hover:bg-white/10"
+          >
+            <Icon name="work" className="text-base" />
+            See open Teaching and Training roles
+          </Link>
+        </div>
       </div>
     </div>
   )
@@ -536,43 +579,66 @@ function TrainerPanel() {
 
 export default function GetStarted() {
   const [params, setParams] = useSearchParams()
-  const role = params.get('role') === 'trainer' ? 'trainer' : 'learner'
+  const role = params.get('role') === 'trainer' ? 'trainer' : params.get('role') === 'schools' ? 'schools' : 'learner'
 
   return (
     <>
-      <PageHero
-        eyebrow="Get Started"
-        title="Create an account or sign in"
-        lead="Learners and trainers sign in separately. Registration takes less than two minutes."
-        icon="how_to_reg"
-      />
+      {/* Hero */}
+      <section className="relative overflow-hidden bg-inverse-surface">
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 opacity-[0.07]"
+          style={{
+            backgroundImage: 'radial-gradient(circle at 1px 1px, #eaf1ff 1px, transparent 0)',
+            backgroundSize: '28px 28px',
+          }}
+        />
+        <div aria-hidden="true" className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-primary to-secondary" />
+        <div aria-hidden="true" className="absolute -right-16 -top-16 h-72 w-72 rounded-full bg-primary/20 blur-3xl" />
+        <div className="shell relative py-14 md:py-20">
+          <h1 className="max-w-3xl font-display text-headline-lg-mobile text-white md:text-display-lg">
+            Create an account or sign in
+          </h1>
+          <p className="mt-5 max-w-2xl text-body-lg text-inverse-on-surface/85">
+            Learners, trainers and institutions sign in separately. Registration takes less than two minutes.
+          </p>
+        </div>
+      </section>
+
       <section className="bg-surface py-16 md:py-20">
         <div className="shell max-w-5xl">
+          {/* Tab bar — elevated pill style */}
           <div
-            className="mb-8 flex flex-wrap rounded-lg border border-outline-variant bg-surface-container-lowest p-1"
+            className="mb-10 rounded-2xl border border-outline-variant bg-surface-container-lowest p-1.5 shadow-sm"
             role="tablist"
             aria-label="Account type"
           >
-            {[
-              { id: 'learner', label: 'Learner', icon: 'school' },
-              { id: 'trainer', label: 'Teacher / Trainer', icon: 'co_present' },
-            ].map((t) => (
-              <button
-                key={t.id}
-                type="button"
-                role="tab"
-                aria-selected={role === t.id}
-                onClick={() => setParams(t.id === 'learner' ? {} : { role: 'trainer' })}
-                className={`inline-flex flex-1 items-center justify-center gap-2 rounded-md px-5 py-2.5 text-label-lg transition-colors sm:flex-none ${
-                  role === t.id ? 'bg-primary text-on-primary' : 'text-on-surface-variant hover:text-primary'
-                }`}
-              >
-                <Icon name={t.icon} className="text-lg" />
-                {t.label}
-              </button>
-            ))}
+            <div className="flex gap-1.5">
+              {[
+                { id: 'learner', label: 'Learner', icon: 'school' },
+                { id: 'trainer', label: 'Teacher / Trainer', icon: 'co_present' },
+                { id: 'schools', label: 'Schools & Colleges', icon: 'account_balance' },
+              ].map((t) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={role === t.id}
+                  onClick={() => setParams(t.id === 'learner' ? {} : { role: t.id })}
+                  className={`relative flex flex-1 items-center justify-center gap-2 rounded-xl px-5 py-3 text-label-lg font-semibold transition-[background-color,color,transform] duration-200 ease-out active:scale-[0.97] sm:flex-none ${
+                    role === t.id
+                      ? 'bg-primary text-on-primary shadow-lift'
+                      : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low'
+                  }`}
+                >
+                  <Icon name={t.icon} className="text-lg" />
+                  {t.label}
+                </button>
+              ))}
+            </div>
           </div>
-          {role === 'learner' ? <LearnerPanel /> : <TrainerPanel />}
+
+          {role === 'learner' ? <LearnerPanel /> : role === 'schools' ? <SchoolsPanel /> : <TrainerPanel />}
         </div>
       </section>
     </>

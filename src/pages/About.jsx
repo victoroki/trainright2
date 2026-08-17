@@ -14,7 +14,7 @@ export default function About() {
     <>
       <PageHero
         title="Accuracy and precision in every lesson"
-        lead="TrainRight Technologies supports the learning process for all levels of learning in Kenya and beyond, from PP1 to Teacher Education and TVET."
+        lead="TrainRight supports learning for all levels in Kenya, from PP1 to Teacher Education and TVET."
         icon="verified"
       />
 
@@ -25,16 +25,14 @@ export default function About() {
             <Icon name="flag" className="mb-5 text-4xl" fill />
             <h2 className="font-display text-headline-md text-white">Our Mission</h2>
             <p className="mt-3 text-body-md text-white/90">
-              To support the learning process for all levels of learning in Kenya and beyond with accuracy and
-              precision, through technology-driven lessons, revision, assessment and teacher support.
+              To support learning for all levels in Kenya, through technology-driven lessons, revision, assessment and teacher support.
             </p>
           </div>
           <div className="rounded-xl border border-outline-variant bg-surface-container-lowest p-8 lg:col-span-1">
             <Icon name="visibility" className="mb-5 text-4xl text-secondary" fill />
             <h2 className="font-display text-headline-md text-on-surface">Our Vision</h2>
             <p className="mt-3 text-body-md text-on-surface-variant">
-              To be Africa's most trusted digital learning companion: the platform every learner, teacher and
-              institution turns to first.
+              To be the platform every learner, teacher and institution in Kenya turns to first.
             </p>
           </div>
           <div className="rounded-xl bg-inverse-surface p-8 lg:col-span-1">

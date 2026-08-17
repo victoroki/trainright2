@@ -1,6 +1,15 @@
 @import "tailwindcss";
 
 @theme {
+  /* Custom easing curves (Emil Kowalski: strong ease-out for UI interactions) */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Elevation: tonal layers + soft shadows instead of heavy drop shadows */
+  --shadow-lift: 0 2px 8px rgba(15, 23, 42, 0.06), 0 12px 32px -8px rgba(15, 23, 42, 0.12);
+  --shadow-pop: 0 4px 16px rgba(15, 23, 42, 0.08), 0 24px 48px -12px rgba(15, 23, 42, 0.18);
+
   /* Precision Academic System colors (DESIGN.md) */
   --color-surface: #f8f9ff;
   --color-surface-dim: #cbdbf5;
@@ -104,11 +113,29 @@
 
   body {
     @apply bg-background text-on-surface font-body text-body-md antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-secondary);
+    outline-offset: 2px;
+    border-radius: 2px;
   }
 
   ::selection {
     background: var(--color-primary-fixed);
     color: var(--color-on-primary-fixed);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
@@ -118,24 +145,24 @@
     @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-10;
   }
 
-  /* Primary button: Academic Red */
+  /* Primary button: Academic Red. Press feedback via scale, smooth lift on hover. */
   .btn-primary {
-    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded bg-primary px-5 py-2.5 font-body text-label-lg text-on-primary transition-colors hover:bg-on-primary-fixed-variant focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary;
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded bg-primary px-5 py-2.5 font-body text-label-lg text-on-primary transition-[background-color,transform,box-shadow] duration-200 ease-out hover:bg-on-primary-fixed-variant hover:shadow-lift active:scale-[0.97];
   }
 
   /* Secondary button: white surface, Digital Blue border and text */
   .btn-secondary {
-    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded border border-secondary bg-surface-container-lowest px-5 py-2.5 font-body text-label-lg text-secondary transition-colors hover:bg-secondary-fixed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary;
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded border border-secondary bg-surface-container-lowest px-5 py-2.5 font-body text-label-lg text-secondary transition-[background-color,transform,border-color] duration-200 ease-out hover:bg-secondary-fixed active:scale-[0.97];
   }
 
   /* Tertiary button: borderless obsidian */
   .btn-tertiary {
-    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded px-4 py-2.5 font-body text-label-lg text-tertiary transition-colors hover:bg-surface-container hover:text-on-surface;
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded px-4 py-2.5 font-body text-label-lg text-tertiary transition-[background-color,color,transform] duration-200 ease-out hover:bg-surface-container hover:text-on-surface active:scale-[0.97];
   }
 
   /* Inputs: white, 1px outline, blue focus ring */
   .field {
-    @apply w-full min-h-11 rounded border border-outline-variant bg-surface-container-lowest px-3.5 py-2.5 text-body-md text-on-surface placeholder:text-outline/70 focus:border-secondary focus:outline-none focus:ring-2 focus:ring-secondary/30;
+    @apply w-full min-h-11 rounded border border-outline-variant bg-surface-container-lowest px-3.5 py-2.5 text-body-md text-on-surface placeholder:text-outline/70 transition-[border-color,box-shadow] duration-200 ease-out focus:border-secondary focus:outline-none focus:ring-2 focus:ring-secondary/30;
   }
 
   .field-label {
@@ -143,6 +170,15 @@
   }
 
   .chip {
-    @apply inline-flex items-center gap-1.5 rounded-full border border-outline-variant bg-surface-container-lowest px-3 py-1 text-label-md font-medium text-on-surface;
+    @apply inline-flex items-center gap-1.5 rounded-full border border-outline-variant bg-surface-container-lowest px-3 py-1 text-label-md font-medium text-on-surface transition-colors duration-200 ease-out;
+  }
+
+  /* Card surface: tonal layer, hairline border, soft lift on hover (Emil: subtle, compound) */
+  .card {
+    @apply rounded-xl border border-outline-variant bg-surface-container-lowest transition-[border-color,box-shadow,transform] duration-200 ease-out;
+  }
+
+  .card-hover {
+    @apply hover:border-primary/50 hover:shadow-lift;
   }
 }

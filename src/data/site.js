@@ -26,6 +26,7 @@ export const PREHEADER_LINKS = [
 
 export const SOCIALS = [
   { label: 'YouTube', short: 'YT', href: 'https://youtube.com' },
+  { label: 'Facebook', short: 'f', href: 'https://www.facebook.com/trainright.co.ke' },
   { label: 'X (Twitter)', short: 'X', href: 'https://x.com' },
   { label: 'Instagram', short: 'IG', href: 'https://instagram.com' },
   { label: 'WhatsApp', short: 'WA', href: 'https://wa.me/254717859447' },
@@ -37,7 +38,7 @@ export const SERVICES = [
   {
     icon: 'smart_display',
     title: 'Pods of Wisdom',
-    desc: 'Short, high-impact videos from our teachers and trainers, organized by area of study. Some pods are free on the website.',
+    desc: 'Short videos from our teachers and trainers, organized by area of study. Some pods are free on the website.',
     access: 'Watch free pods on this page, or download the TrainRight Digital App for the full, personalized feed.',
     to: '/',
   },
@@ -107,9 +108,10 @@ export const SERVICES = [
   {
     icon: 'school',
     title: 'TVET Training',
-    desc: 'Vocational and technical training aligned to occupational standards, Levels 3 to 6.',
-    access: 'Register, choose TVET Courses, then select your course and units.',
+    desc: 'Vocational and technical training aligned to TVET CDACC standards, Levels 3,4,5 and 6.',
+    access: 'Register to pursue a TVET Course at our college.',
     to: '/get-started',
+    href: 'https://westlands.ac.ke',
   },
 ]
 

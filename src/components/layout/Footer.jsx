@@ -26,7 +26,7 @@ export default function Footer() {
         <div className="space-y-6">
           <Logo light />
           <p className="text-body-sm text-inverse-on-surface/75">
-            Lessons, revision and assessment for every level of learning in Kenya, delivered through the TrainRight Digital App and website.
+            Lessons, revision and assessment for every level in Kenya, delivered through the TrainRight Digital App and website.
           </p>
           <SocialChips dark />
         </div>
@@ -84,14 +84,6 @@ export default function Footer() {
       <div className="border-t border-white/10">
         <div className="shell flex flex-col items-center justify-between gap-3 py-6 text-body-sm text-inverse-on-surface/60 md:flex-row">
           <p>©TrainRight Technologies 2026, All rights Reserved</p>
-          <div className="flex gap-6">
-            <Link to="/about" className="transition-colors hover:text-white">
-              Sitemap
-            </Link>
-            <Link to="/privacy-policy" className="transition-colors hover:text-white">
-              Cookies
-            </Link>
-          </div>
         </div>
       </div>
     </footer>

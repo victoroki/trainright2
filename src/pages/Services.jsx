@@ -7,8 +7,8 @@ export default function Services() {
   return (
     <>
       <PageHero
-        title="One partner for the entire learning journey"
-        lead="We support the learning process for all levels of learning in Kenya and beyond with accuracy and precision. Every service below includes a guide on how to access it."
+        title="All our services in one place"
+        lead="We support learning for all levels in Kenya. Every service below includes a guide on how to access it."
         icon="auto_stories"
       />
 
@@ -39,13 +39,25 @@ export default function Services() {
                     How to access
                   </p>
                   <p className="text-body-sm text-on-surface">{s.access}</p>
-                  <Link
-                    to={s.to}
-                    className="mt-3 inline-flex items-center gap-1.5 text-label-lg text-primary hover:underline"
-                  >
-                    Open service
-                    <Icon name="arrow_forward" className="text-base" />
-                  </Link>
+                  {s.href ? (
+                    <a
+                      href={s.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-3 inline-flex items-center gap-1.5 text-label-lg text-primary hover:underline"
+                    >
+                      Open service
+                      <Icon name="open_in_new" className="text-base" />
+                    </a>
+                  ) : (
+                    <Link
+                      to={s.to}
+                      className="mt-3 inline-flex items-center gap-1.5 text-label-lg text-primary hover:underline"
+                    >
+                      Open service
+                      <Icon name="arrow_forward" className="text-base" />
+                    </Link>
+                  )}
                 </div>
               </div>
             ))}

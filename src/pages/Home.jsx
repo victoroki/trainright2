@@ -1,13 +1,22 @@
+import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
 import { AdvertBanner, QrCard, SectionHeader, StoreButtons } from '../components/ui.jsx'
 import { LEVEL_GROUPS, POD_CATEGORIES, POD_VIDEOS, SERVICES } from '../data/site.js'
-import phoneBg from '../images/phone-bg.svg'
+import heroImage from '../images/hero.png'
 
 function PodCard({ pod }) {
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest transition-shadow hover:shadow-[0_4px_12px_rgba(15,23,42,0.08)]">
-      <div className="relative flex aspect-video items-center justify-center bg-inverse-surface">
+    <article className="group flex h-full flex-col overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest transition-[border-color,box-shadow,transform] duration-200 ease-out hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-lift">
+      <div className="relative flex aspect-video items-center justify-center overflow-hidden bg-inverse-surface">
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage: 'radial-gradient(circle at 1px 1px, #eaf1ff 1px, transparent 0)',
+            backgroundSize: '20px 20px',
+          }}
+        />
         <Icon name="smart_display" className="absolute text-6xl text-white/10" fill />
         <span className="absolute left-3 top-3 rounded-full bg-secondary/90 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white">
           {pod.subject}
@@ -15,7 +24,7 @@ function PodCard({ pod }) {
         <span className="absolute bottom-3 right-3 rounded bg-black/70 px-2 py-0.5 text-[11px] font-semibold text-white">
           {pod.duration}
         </span>
-        <span className="relative flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white transition-transform group-hover:scale-110">
+        <span className="relative flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-lift transition-transform duration-200 ease-out group-hover:scale-110">
           <Icon name="play_arrow" className="text-3xl" fill />
         </span>
       </div>
@@ -35,109 +44,245 @@ function PodCard({ pod }) {
   )
 }
 
+// Aggregate pod view counts so adverts can be biased toward the most-viewed filter.
+const viewCount = (v) => {
+  const n = Number(String(v).replace(/[^\d]/g, ''))
+  return String(v).includes('k') ? n * 1000 : n
+}
+
+const MOST_VIEWED_SUBJECT = (() => {
+  const totals = {}
+  POD_VIDEOS.forEach((p) => {
+    totals[p.subject] = (totals[p.subject] || 0) + viewCount(p.views)
+  })
+  return Object.entries(totals).sort((a, b) => b[1] - a[1])[0]?.[0] || null
+})()
+
+const POD_FILTERS = ['All', ...POD_CATEGORIES.map((c) => c.title)]
+
+// Interleave `adCount` ad slots at random positions, guaranteeing one ad right
+// after the first item matching `biasMatch` (the most-viewed filter).
+function withAds(items, adCount, biasMatch) {
+  const slots = items.length + adCount
+  const positions = new Set()
+  let guard = 0
+  while (positions.size < adCount && guard < 100) {
+    guard += 1
+    positions.add(1 + Math.floor(Math.random() * (slots - 1)))
+  }
+  const out = []
+  let idx = 0
+  for (let i = 0; i < slots; i += 1) {
+    if (positions.has(i)) out.push({ type: 'ad', key: `ad-${i}` })
+    else {
+      const item = items[idx]
+      idx += 1
+      out.push({ type: 'item', key: item.title, item })
+    }
+  }
+  const biasIdx = out.findIndex((x) => x.type === 'item' && biasMatch?.(x.item))
+  if (biasIdx !== -1 && out[biasIdx + 1]?.type !== 'ad') {
+    out.splice(biasIdx + 1, 0, { type: 'ad', key: 'ad-bias' })
+  }
+  return out
+}
+
+function PodAdCard() {
+  return (
+    <article className="relative flex h-full flex-col justify-between overflow-hidden rounded-xl bg-primary p-5 shadow-lift">
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 opacity-10"
+        style={{
+          backgroundImage: 'radial-gradient(circle at 1px 1px, #ffffff 1px, transparent 0)',
+          backgroundSize: '20px 20px',
+        }}
+      />
+      <div className="relative">
+        <h4 className="font-display text-base font-bold leading-snug text-white">
+          Put your education brand in front of 50,000+ learners
+        </h4>
+        <p className="mt-2 text-body-sm text-white/85">Let&apos;s reach more learners together.</p>
+      </div>
+      <Link
+        to="/get-started?role=schools"
+        className="relative mt-4 inline-flex items-center gap-1.5 text-label-lg font-semibold text-white underline-offset-4 transition-colors hover:text-primary-fixed-dim hover:underline"
+      >
+        Advertise with us
+        <Icon name="arrow_forward" className="text-base" />
+      </Link>
+    </article>
+  )
+}
+
 export default function Home() {
   const levels = LEVEL_GROUPS.flatMap((g) => g.levels)
+  const [filter, setFilter] = useState('All')
+
+  const filteredPods = useMemo(
+    () => (filter === 'All' ? POD_VIDEOS : POD_VIDEOS.filter((p) => p.subject === filter)),
+    [filter],
+  )
+
+  // One random ad per filtered result set, guaranteed in the most-viewed filter.
+  const podItems = useMemo(
+    () => withAds(filteredPods, 1, (p) => p.subject === MOST_VIEWED_SUBJECT),
+    [filteredPods],
+  )
+
+  // Trending feed: a single ad, at a random position.
+  const trendingItems = useMemo(() => withAds(POD_VIDEOS.slice(0, 6), 1, (p) => p.subject === MOST_VIEWED_SUBJECT), [])
+
+  // Limited preview: first 4 pods, no ads
+  const previewPods = POD_VIDEOS.slice(0, 4)
+
+  const scrollToPods = () => {
+    document.getElementById('pods-filters')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
   return (
     <>
-      {/* Hero: app download, QR code and high-level advert widgets */}
-      <section className="relative overflow-hidden bg-surface-container-low py-16 md:py-24">
-        <div className="shell grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-12">
-          <div className="relative z-10 order-2 lg:order-1">
-            <h1 className="mb-6 font-display text-headline-lg-mobile text-on-surface md:text-display-lg">
-              The TrainRight Digital App
+      {/* Hero: Education landing view */}
+      <section className="relative overflow-hidden bg-inverse-surface py-20 md:min-h-[88vh] md:py-0">
+        <div
+          aria-hidden="true"
+          className="absolute inset-0"
+          style={{ backgroundImage: `url(${heroImage})`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.35 }}
+        />
+        <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-r from-inverse-surface via-inverse-surface/85 to-transparent" />
+        <div aria-hidden="true" className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-primary to-secondary" />
+        <div aria-hidden="true" className="absolute -right-16 top-1/4 h-64 w-64 rounded-full bg-primary/15 blur-3xl" />
+        <div aria-hidden="true" className="absolute -left-16 bottom-1/4 h-56 w-56 rounded-full bg-secondary/20 blur-3xl" />
+        <div className="shell relative grid grid-cols-1 items-center gap-12 py-16 md:grid-cols-2 md:py-20">
+          <div>
+            <h1 className="font-display text-headline-lg-mobile text-white md:text-display-lg">
+              Free video lessons, revision and assessment for every level in Kenya.
             </h1>
-            <p className="mb-10 max-w-lg text-body-lg text-on-surface-variant">
-              Lessons, revision and assessments for every level of learning in Kenya, from PP1 to teacher education.
-              Available on Android now.
+            <p className="mt-6 max-w-xl text-body-lg text-inverse-on-surface/85">
+              Free video lessons, revision tools, Assessment tool and teacher resources all in one platform built for
+              Kenya&apos;s learners, educators, and institutions.
             </p>
-            <div className="flex flex-col gap-8 sm:flex-row sm:items-center">
-              <div className="order-2 sm:order-1">
-                <StoreButtons />
-              </div>
-              <div className="order-1 sm:order-2">
-                <QrCard caption="TrainRight Digital App" />
-              </div>
+            <div className="mt-10 flex flex-wrap items-center gap-4">
+              <button type="button" onClick={scrollToPods} className="btn-primary">
+                <Icon name="smart_display" className="text-lg" />
+                Explore Pods of Wisdom
+              </button>
+              <Link
+                to="/revision-assessment"
+                className="inline-flex min-h-11 items-center gap-2 rounded border border-white/25 px-5 py-2.5 text-label-lg text-white transition-[background-color,border-color,transform] duration-200 ease-out hover:bg-white/10 hover:border-white/40 active:scale-[0.97]"
+              >
+                <Icon name="fact_check" className="text-lg" />
+                Start Revision
+              </Link>
             </div>
-            <p className="mt-8 flex items-center gap-2 text-body-sm text-on-surface-variant">
-              <Icon name="info" className="shrink-0 text-lg text-secondary" />
-              Pods of Wisdom are free on the website. The full feed, lessons and assessments live in the app.
-            </p>
           </div>
 
-          <div className="relative order-1 flex items-center justify-center lg:order-2 lg:h-[620px]">
-            {/* Soft blue disc behind the slanted mockup */}
-            <div
-              aria-hidden="true"
-              className="absolute left-1/2 top-1/2 h-72 w-72 -translate-x-[55%] -translate-y-1/2 rounded-full bg-surface-container-highest sm:h-[26rem] sm:w-[26rem]"
-            />
-            {/* Dotted accent, right side */}
-            <div
-              aria-hidden="true"
-              className="absolute right-2 top-12 h-24 w-24 sm:right-4 sm:h-32 sm:w-32"
-              style={{
-                backgroundImage: 'radial-gradient(circle at 1.5px 1.5px, #8fa7fe 1.5px, transparent 0)',
-                backgroundSize: '12px 12px',
-              }}
-            />
-            <img
-              src={phoneBg}
-              alt="TrainRight Digital App registration: select your level, set a nickname and a 4-digit PIN"
-              className="relative h-[300px] w-auto sm:h-[420px] md:h-[500px] lg:h-[560px]"
-            />
+          {/* QR code guide */}
+          <div className="flex justify-center lg:justify-end">
+            <div className="w-full max-w-sm rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur shadow-lift sm:p-8">
+              <span className="inline-flex items-center gap-2 text-label-lg uppercase tracking-widest text-primary-fixed-dim">
+                <Icon name="cloud_download" className="text-lg" />
+                Download the App
+              </span>
+              <h3 className="mt-3 font-display text-headline-md text-white">TrainRight Digital App</h3>
+              <p className="mt-2 text-body-sm text-inverse-on-surface/70">
+                Learn anywhere, anytime. Access pods, assessments and your profile on the go.
+              </p>
+              <div className="mt-6 flex justify-center">
+                <QrCard large caption="Scan to download the TrainRight Digital App" />
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Pods of Wisdom categories */}
+      {/* Pods preview — limited selection on homepage */}
       <section className="bg-surface py-16 md:py-20">
         <div className="shell">
-          <div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+          <div className="mb-10 flex flex-col justify-between gap-6 md:flex-row md:items-end">
             <SectionHeader
               title="Pods of Wisdom"
-              lead="Short videos by our teachers, organized by subject. Some pods are free on the website. Each pod runs 10 seconds to 5 minutes."
+              lead="Short videos by our teachers, organized by subject. Each pod runs 10 seconds to 5 minutes."
             />
-            <Link to="/get-started" className="inline-flex shrink-0 items-center gap-2 text-label-lg text-secondary hover:underline">
-              View All Categories
-              <Icon name="arrow_forward" />
-            </Link>
+            <button type="button" onClick={scrollToPods} className="btn-secondary shrink-0">
+              <Icon name="smart_display" />
+              Explore all Pods
+            </button>
           </div>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {POD_CATEGORIES.map((cat) => (
-              <div
-                key={cat.title}
-                className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-outline-variant bg-surface-container p-7 transition-shadow hover:shadow-[0_4px_12px_rgba(15,23,42,0.08)]"
-              >
-                <div className="relative z-10 flex flex-1 flex-col">
-                  <Icon name={cat.icon} className="mb-4 text-4xl text-primary" fill />
-                  <h3 className="mb-2 font-display text-headline-sm text-on-surface">{cat.title}</h3>
-                  <p className="mb-6 text-body-sm text-on-surface-variant">{cat.desc}</p>
-                  <div className="mt-auto flex flex-wrap gap-2">
-                    {cat.tags.map((t) => (
-                      <span key={t} className="chip">
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div
-                  aria-hidden="true"
-                  className="absolute -bottom-8 -right-8 text-on-surface-variant opacity-5 transition-transform group-hover:scale-110"
-                >
-                  <Icon name={cat.bgIcon} className="text-[160px]" />
-                </div>
-              </div>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {previewPods.map((pod) => (
+              <PodCard key={pod.title} pod={pod} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* Free pods feed */}
+      {/* Pods of Wisdom — full filterable view with sticky filter bar */}
+      <section id="pods-filters" className="scroll-mt-24">
+        {/* Sticky filter bar — dark, matching the reference site */}
+        <div className="sticky top-[96px] z-30 border-b border-white/8 bg-inverse-surface py-4 md:top-[112px]">
+          <div className="shell">
+            <div className="flex items-center gap-3 overflow-x-auto pb-1">
+              <span className="shrink-0 text-label-md font-medium text-inverse-on-surface/40">Filter:</span>
+              {POD_FILTERS.map((f) => (
+                <button
+                  key={f}
+                  type="button"
+                  onClick={() => setFilter(f)}
+                  aria-pressed={filter === f}
+                  className={`shrink-0 rounded px-3 py-1.5 text-label-md font-semibold transition-[background-color,color,transform] duration-200 ease-out active:scale-[0.97] ${
+                    filter === f
+                      ? 'bg-primary text-on-primary'
+                      : 'border border-white/10 bg-white/5 text-inverse-on-surface/50 hover:border-white/20 hover:text-white'
+                  }`}
+                >
+                  {f}
+                  {f === MOST_VIEWED_SUBJECT && (
+                    <span className="ml-1.5 rounded bg-white/15 px-1.5 py-0.5 text-[9px] font-bold uppercase">
+                      Popular
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Pod grid — dark background matching reference */}
+        <div className="bg-inverse-surface py-14">
+          <div className="shell">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {podItems.map((it) =>
+                it.type === 'ad' ? (
+                  <PodAdCard key={it.key} />
+                ) : (
+                  <PodCard key={it.item.title} pod={it.item} />
+                ),
+              )}
+            </div>
+
+            {/* Teacher CTA */}
+            <div className="mt-16 bg-primary p-8 text-center">
+              <h3 className="font-display text-headline-md font-bold uppercase text-white">Are you a teacher or trainer?</h3>
+              <p className="mt-2 text-body-sm text-white/65">
+                Upload your own pods and reach thousands of Kenyan learners. Subject to verification and content review.
+              </p>
+              <Link to="/teachers-trainers" className="mt-5 inline-flex items-center gap-2 bg-white px-6 py-3 font-bold uppercase tracking-wide text-primary transition-colors hover:bg-white/90">
+                <Icon name="co_present" className="text-base" />
+                Apply to upload content
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Trending pods feed */}
       <section className="border-y border-outline-variant/70 bg-surface-container-low py-16 md:py-20">
         <div className="shell">
           <div className="mb-10 flex flex-col justify-between gap-6 md:flex-row md:items-end">
             <SectionHeader
               title="Trending Pods"
-              lead="Every pod is between 10 seconds and 5 minutes. Teachers and trainers contribute a free pod for every paid lesson they upload."
+              lead="The most-watched pods across all subjects this week."
             />
             <Link to="/get-started" className="btn-secondary shrink-0">
               <Icon name="phone_android" />
@@ -145,16 +290,16 @@ export default function Home() {
             </Link>
           </div>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {POD_VIDEOS.slice(0, 6).map((pod) => (
-              <PodCard key={pod.title} pod={pod} />
-            ))}
+            {trendingItems.map((it) =>
+              it.type === 'ad' ? <PodAdCard key={it.key} /> : <PodCard key={it.item.title} pod={it.item} />,
+            )}
           </div>
           <div className="mt-10">
             <AdvertBanner
               title="Put your education brand in front of 50,000+ learners"
-              lead="Priority adverts appear here, in the app feed and across Pods of Wisdom. Book a slot with our commercial team."
+              lead="Let's reach more learners together"
               cta="Advertise with us"
-              to="/work-with-us"
+              to="/get-started?role=schools"
             />
           </div>
         </div>
@@ -175,18 +320,20 @@ export default function Home() {
               <Link
                 key={s.title}
                 to={s.to}
-                className="flex h-full flex-col rounded-xl border border-outline-variant bg-surface-container-lowest p-5 transition-colors hover:border-primary"
+                className="card card-hover flex h-full flex-col p-5"
               >
                 <div className="flex items-center gap-3">
-                  <Icon name={s.icon} className="text-xl text-primary" />
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-surface-container">
+                    <Icon name={s.icon} className="text-primary" />
+                  </span>
                   <h4 className="font-display text-base font-bold text-on-surface">{s.title}</h4>
                 </div>
-                <p className="mt-2 flex-1 pl-9 text-body-sm leading-relaxed text-on-surface-variant">{s.desc}</p>
+                <p className="mt-3 flex-1 pl-13 text-body-sm leading-relaxed text-on-surface-variant">{s.desc}</p>
               </Link>
             ))}
             <Link
               to="/services"
-              className="flex h-full flex-col justify-between rounded-xl bg-primary p-6 text-on-primary transition-colors hover:bg-on-primary-fixed-variant"
+              className="flex h-full flex-col justify-between rounded-xl bg-primary p-6 text-on-primary shadow-lift transition-[background-color,transform] duration-200 ease-out hover:bg-on-primary-fixed-variant active:scale-[0.98]"
             >
               <h4 className="font-display text-headline-sm text-white">Explore all 11 services</h4>
               <span className="mt-6 inline-flex items-center gap-2 text-label-lg">
@@ -206,7 +353,7 @@ export default function Home() {
               <SectionHeader
                 dark
                 title="From PP1 to Teacher Education"
-                lead="One account, your own subjects, auto-marked quizzes and certificates as you complete each level."
+                lead="Your own subjects, auto-marked quizzes and certificates as you complete each level."
               />
               <Link to="/get-started" className="btn-primary mt-8">
                 <Icon name="person_add" />
@@ -230,7 +377,7 @@ export default function Home() {
       {/* App download CTA */}
       <section className="bg-surface py-16 md:py-24">
         <div className="shell">
-          <div className="relative overflow-hidden rounded-xl bg-primary">
+          <div className="relative overflow-hidden rounded-xl bg-primary shadow-lift">
             <div
               aria-hidden="true"
               className="absolute inset-0 opacity-10"

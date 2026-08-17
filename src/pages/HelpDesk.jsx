@@ -1,9 +1,10 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
 import { PageHero, SectionHeader } from '../components/ui.jsx'
 import { CONTACT, FAQS } from '../data/site.js'
 
-function FaqItem({ q, a, open, onToggle }) {
+function FaqItem({ q, a, open, onToggle, action }) {
   return (
     <div className="border-b border-outline-variant/70 last:border-b-0">
       <button
@@ -24,7 +25,8 @@ function FaqItem({ q, a, open, onToggle }) {
         }`}
       >
         <div className="min-h-0 overflow-hidden">
-          <p className="max-w-3xl pb-6 text-body-md text-on-surface-variant">{a}</p>
+          <p className="max-w-3xl pb-4 text-body-md text-on-surface-variant">{a}</p>
+          {action && <div className="pb-6">{action}</div>}
         </div>
       </div>
     </div>
@@ -62,6 +64,14 @@ export default function HelpDesk() {
                   a={f.a}
                   open={openIndex === i}
                   onToggle={() => setOpenIndex(openIndex === i ? -1 : i)}
+                  action={
+                    i === 0 ? (
+                      <Link to="/get-started" className="btn-primary">
+                        <Icon name="how_to_reg" className="text-base" />
+                        Get Started
+                      </Link>
+                    ) : undefined
+                  }
                 />
               ))}
             </div>

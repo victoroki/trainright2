@@ -60,7 +60,6 @@ const SECTIONS = [
     title: 'Complaints',
     body: [
       'To exercise any of these rights or raise a concern, contact our Data Protection Officer through the Help Desk or at happy@trainright.co.ke.',
-      'If you are not satisfied with our response, you have the right to lodge a complaint with the Office of the Data Protection Commissioner (ODPC), Kenya.',
     ],
   },
 ]
