@@ -1,7 +1,6 @@
-import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import Icon from '../components/Icon.jsx'
-import { AdvertBanner, QrCard, SectionHeader, StoreButtons } from '../components/ui.jsx'
+import { QrCard, SectionHeader, StoreButtons } from '../components/ui.jsx'
 import { LEVEL_GROUPS, POD_VIDEOS, SERVICES } from '../data/site.js'
 import heroImage from '../images/hero.png'
 
@@ -44,80 +43,11 @@ function PodCard({ pod }) {
   )
 }
 
-// Aggregate pod view counts so adverts can be biased toward the most-viewed filter.
-const viewCount = (v) => {
-  const n = Number(String(v).replace(/[^\d]/g, ''))
-  return String(v).includes('k') ? n * 1000 : n
-}
-
-const MOST_VIEWED_SUBJECT = (() => {
-  const totals = {}
-  POD_VIDEOS.forEach((p) => {
-    totals[p.subject] = (totals[p.subject] || 0) + viewCount(p.views)
-  })
-  return Object.entries(totals).sort((a, b) => b[1] - a[1])[0]?.[0] || null
-})()
-
-// Interleave `adCount` ad slots at random positions, guaranteeing one ad right
-// after the first item matching `biasMatch` (the most-viewed filter).
-function withAds(items, adCount, biasMatch) {
-  const slots = items.length + adCount
-  const positions = new Set()
-  let guard = 0
-  while (positions.size < adCount && guard < 100) {
-    guard += 1
-    positions.add(1 + Math.floor(Math.random() * (slots - 1)))
-  }
-  const out = []
-  let idx = 0
-  for (let i = 0; i < slots; i += 1) {
-    if (positions.has(i)) out.push({ type: 'ad', key: `ad-${i}` })
-    else {
-      const item = items[idx]
-      idx += 1
-      out.push({ type: 'item', key: item.title, item })
-    }
-  }
-  const biasIdx = out.findIndex((x) => x.type === 'item' && biasMatch?.(x.item))
-  if (biasIdx !== -1 && out[biasIdx + 1]?.type !== 'ad') {
-    out.splice(biasIdx + 1, 0, { type: 'ad', key: 'ad-bias' })
-  }
-  return out
-}
-
-function PodAdCard() {
-  return (
-    <article className="relative flex h-full flex-col justify-between overflow-hidden rounded-xl bg-primary p-5 shadow-lift">
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 opacity-10"
-        style={{
-          backgroundImage: 'radial-gradient(circle at 1px 1px, #ffffff 1px, transparent 0)',
-          backgroundSize: '20px 20px',
-        }}
-      />
-      <div className="relative">
-        <h4 className="font-display text-base font-bold leading-snug text-white">
-          Put your education brand in front of 50,000+ learners
-        </h4>
-        <p className="mt-2 text-body-sm text-white/85">Let&apos;s reach more learners together.</p>
-      </div>
-      <Link
-        to="/get-started?role=schools"
-        className="relative mt-4 inline-flex items-center gap-1.5 text-label-lg font-semibold text-white underline-offset-4 transition-colors hover:text-primary-fixed-dim hover:underline"
-      >
-        Advertise with us
-        <Icon name="arrow_forward" className="text-base" />
-      </Link>
-    </article>
-  )
-}
-
 export default function Home() {
   const levels = LEVEL_GROUPS.flatMap((g) => g.levels)
 
-  // Trending feed: a single ad, at a random position.
-  const trendingItems = useMemo(() => withAds(POD_VIDEOS.slice(0, 6), 1, (p) => p.subject === MOST_VIEWED_SUBJECT), [])
+  // Trending: next 3 pods after the preview, no ads
+  const trendingPods = POD_VIDEOS.slice(4, 7)
 
   // Limited preview: first 4 pods, no ads
   const previewPods = POD_VIDEOS.slice(0, 4)
@@ -207,23 +137,15 @@ export default function Home() {
               title="Trending Pods"
               lead="The most-watched pods across all subjects this week."
             />
-            <Link to="/get-started" className="btn-secondary shrink-0">
-              <Icon name="phone_android" />
-              Open in the App
+            <Link to="/pods" className="btn-secondary shrink-0">
+              <Icon name="smart_display" />
+              View all Pods
             </Link>
           </div>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {trendingItems.map((it) =>
-              it.type === 'ad' ? <PodAdCard key={it.key} /> : <PodCard key={it.item.title} pod={it.item} />,
-            )}
-          </div>
-          <div className="mt-10">
-            <AdvertBanner
-              title="Put your education brand in front of 50,000+ learners"
-              lead="Let's reach more learners together"
-              cta="Advertise with us"
-              to="/get-started?role=schools"
-            />
+            {trendingPods.map((pod) => (
+              <PodCard key={pod.title} pod={pod} />
+            ))}
           </div>
         </div>
       </section>
