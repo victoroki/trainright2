@@ -58,8 +58,6 @@ const MOST_VIEWED_SUBJECT = (() => {
   return Object.entries(totals).sort((a, b) => b[1] - a[1])[0]?.[0] || null
 })()
 
-const POD_FILTERS = ['All', ...POD_CATEGORIES.map((c) => c.title)]
-
 // Interleave `adCount` ad slots at random positions, guaranteeing one ad right
 // after the first item matching `biasMatch` (the most-viewed filter).
 function withAds(items, adCount, biasMatch) {
