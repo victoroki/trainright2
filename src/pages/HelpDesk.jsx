@@ -70,6 +70,11 @@ export default function HelpDesk() {
                         <Icon name="how_to_reg" className="text-base" />
                         Get Started
                       </Link>
+                    ) : i === 6 ? (
+                      <Link to="/get-started" className="btn-secondary">
+                        <Icon name="school" className="text-base" />
+                        Create a Teacher Account
+                      </Link>
                     ) : undefined
                   }
                 />
