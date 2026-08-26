@@ -18,6 +18,12 @@ function AdvertForm({ onSubmitted }) {
 
   return (
     <form onSubmit={submit} className="space-y-5" noValidate>
+      <div>
+        <label htmlFor="advert-org" className="field-label">
+          Name of School/College/Company
+        </label>
+        <input id="advert-org" required className="field" placeholder="e.g. Starehe Boys Centre" />
+      </div>
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div>
           <label htmlFor="advert-name" className="field-label">

@@ -100,6 +100,9 @@ export default function Home() {
               <div className="mt-6 flex justify-center">
                 <QrCard large caption="Scan to download the TrainRight Digital App" />
               </div>
+              <div className="mt-5 flex justify-center">
+                <StoreButtons />
+              </div>
             </div>
           </div>
         </div>
