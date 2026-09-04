@@ -556,14 +556,10 @@ function TrainerPanel() {
           ))}
         </ol>
         <div className="mt-7 flex flex-wrap gap-3">
-          <button
-            type="button"
-            onClick={() => document.getElementById('trainer-sign-in')?.scrollIntoView({ behavior: 'smooth', block: 'center' })}
-            className="btn-primary"
-          >
+          <Link to="/create-account" className="btn-primary">
             <Icon name="person_add" className="text-base" />
             Create Account
-          </button>
+          </Link>
           <Link
             to="/work-with-us"
             className="inline-flex items-center gap-2 rounded border border-white/30 px-5 py-2.5 text-label-lg text-white transition-colors hover:bg-white/10"
