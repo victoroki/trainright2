@@ -13,6 +13,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy.jsx'
 import TermsOfService from './pages/TermsOfService.jsx'
 import ContactUs from './pages/ContactUs.jsx'
 import GetStarted from './pages/GetStarted.jsx'
+import CreateAccount from './pages/CreateAccount.jsx'
 import Pods from './pages/Pods.jsx'
 import NotFound from './pages/NotFound.jsx'
 
@@ -33,6 +34,7 @@ export default function App() {
         <Route path="terms-of-service" element={<TermsOfService />} />
         <Route path="contact-us" element={<ContactUs />} />
         <Route path="get-started" element={<GetStarted />} />
+        <Route path="create-account" element={<CreateAccount />} />
         <Route path="pods" element={<Pods />} />
         <Route path="*" element={<NotFound />} />
       </Route>
