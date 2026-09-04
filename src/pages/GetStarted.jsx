@@ -199,7 +199,7 @@ function LearnerPanel() {
                   setErrors({})
                   setForgotSent(false)
                 }}
-                className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-label-lg font-semibold transition-[background-color,color,transform] duration-200 ease-out active:scale-[0.97] ${
+                className={`inline-flex shrink-0 items-center gap-2 rounded-xl px-5 py-2.5 text-label-lg font-semibold transition-[background-color,color,transform] duration-200 ease-out active:scale-[0.97] ${
                   mode === t.id
                     ? 'bg-inverse-surface text-white shadow-lift'
                     : 'border border-outline-variant text-on-surface-variant hover:border-primary/50 hover:text-primary hover:bg-surface-container-low'
@@ -473,7 +473,7 @@ function TrainerPanel() {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
       <div id="trainer-sign-in" className="rounded-2xl border border-outline-variant bg-surface-container-lowest p-6 shadow-sm md:p-8">
         {ok ? (
           <div className="flex flex-col items-start gap-4">
@@ -613,7 +613,7 @@ export default function GetStarted() {
             role="tablist"
             aria-label="Account type"
           >
-            <div className="flex gap-1.5">
+            <div className="flex gap-1.5 overflow-x-auto scrollbar-none">
               {[
                 { id: 'learner', label: 'Learner', icon: 'school' },
                 { id: 'trainer', label: 'Teacher / Trainer', icon: 'co_present' },
@@ -625,7 +625,7 @@ export default function GetStarted() {
                   role="tab"
                   aria-selected={role === t.id}
                   onClick={() => setParams(t.id === 'learner' ? {} : { role: t.id })}
-                  className={`relative flex flex-1 items-center justify-center gap-2 rounded-xl px-5 py-3 text-label-lg font-semibold transition-[background-color,color,transform] duration-200 ease-out active:scale-[0.97] sm:flex-none ${
+                  className={`relative flex shrink-0 items-center justify-center gap-2 rounded-xl px-5 py-3 text-label-lg font-semibold transition-[background-color,color,transform] duration-200 ease-out active:scale-[0.97] ${
                     role === t.id
                       ? 'bg-primary text-on-primary shadow-lift'
                       : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low'
