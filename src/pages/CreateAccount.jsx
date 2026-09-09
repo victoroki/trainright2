@@ -82,6 +82,7 @@ export default function CreateAccount() {
     if (!form.role) next.role = 'Select the role you are applying for.'
     if (!form.subject.trim()) next.subject = 'Enter the subject or course you teach.'
     if (!form.cv) next.cv = 'Upload your CV to continue.'
+    if (!form.certs) next.certs = 'Upload your certified certificates and transcripts to continue.'
     if (!form.consent) next.consent = 'You must accept the consent form to submit your request.'
     setErrors(next)
     if (Object.keys(next).length) return
@@ -227,8 +228,8 @@ export default function CreateAccount() {
               </div>
 
               <p className="mt-2 text-body-sm text-on-surface-variant">
-                Upload your documents in soft copy. Your CV is required; certificates and academic transcripts are
-                welcome.
+                Upload your documents in soft copy. Your CV and certified certificates and transcripts are
+                required.
               </p>
 
               <div className="mt-6 space-y-4">
@@ -240,10 +241,11 @@ export default function CreateAccount() {
                   error={errors.cv}
                 />
                 <UploadBox
-                  label="Certificates & transcripts (optional)"
+                  label="Certified Certificates and Transcripts*"
                   accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                   file={form.certs}
                   onChange={(f) => set('certs', f)}
+                  error={errors.certs}
                 />
               </div>
 
@@ -280,7 +282,8 @@ export default function CreateAccount() {
                   Submit Account Creation request
                 </button>
                 <Link to="/get-started?role=trainer" className="btn-tertiary">
-                  Already have a staff account? Sign in
+                  Already have a staff account?{' '}
+                  <span className="inline-block rounded bg-error px-2 py-0.5 font-semibold text-on-error">Sign in</span>
                 </Link>
               </div>
             </form>
