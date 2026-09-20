@@ -114,7 +114,7 @@ export default function Home() {
           <div className="mb-10 flex flex-col justify-between gap-6 md:flex-row md:items-end">
             <SectionHeader
               title="Pods of Wisdom"
-              lead="Short videos by our teachers, organized by subject. Each pod runs 10 seconds to 5 minutes."
+              lead="Here are the free lessons."
             />
             <Link to="/pods" className="btn-secondary shrink-0">
               <Icon name="smart_display" />

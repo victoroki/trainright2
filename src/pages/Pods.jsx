@@ -112,21 +112,26 @@ function withAds(items, adCount, biasMatch) {
 
 export default function Pods() {
   const [filter, setFilter] = useState('All')
+  const [query, setQuery] = useState('')
 
-  const filteredPods = useMemo(
-    () => (filter === 'All' ? POD_VIDEOS : POD_VIDEOS.filter((p) => p.subject === filter)),
-    [filter],
-  )
+  const filteredPods = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    return POD_VIDEOS.filter((p) => {
+      if (filter !== 'All' && p.subject !== filter) return false
+      if (!q) return true
+      return [p.title, p.teacher, p.level, p.subject].some((v) => String(v).toLowerCase().includes(q))
+    })
+  }, [filter, query])
 
   const podItems = useMemo(
-    () => withAds(filteredPods, 1, (p) => p.subject === MOST_VIEWED_SUBJECT),
+    () => (filteredPods.length ? withAds(filteredPods, 1, (p) => p.subject === MOST_VIEWED_SUBJECT) : []),
     [filteredPods],
   )
 
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-inverse-surface py-16 md:py-20">
+      <section className="relative overflow-hidden bg-inverse-surface pb-10 pt-12 md:pb-12 md:pt-16">
         <div
           aria-hidden="true"
           className="absolute inset-0"
@@ -137,24 +142,40 @@ export default function Pods() {
           }}
         />
         <div className="shell relative">
-          <span className="inline-flex items-center gap-2 text-label-lg uppercase tracking-widest text-primary-fixed-dim">
-            <Icon name="smart_display" className="text-lg" />
-            Pods of Wisdom
-          </span>
-          <h1 className="mt-3 font-display text-headline-lg-mobile text-white md:text-display-sm">
-            Free short-form educational videos by subject area
-          </h1>
-          <p className="mt-4 max-w-2xl text-body-lg text-inverse-on-surface/75">
-            Browse, watch, and learn. Uploaded by verified teachers and trainers. No account required.
-          </p>
+          <h1 className="font-display text-headline-lg-mobile text-white md:text-display-sm">PODS OF WISDOM</h1>
+          <p className="mt-2 max-w-2xl text-body-lg text-inverse-on-surface/75">Here are the free lessons.</p>
+          <form role="search" onSubmit={(e) => e.preventDefault()} className="relative mt-5 max-w-md">
+            <Icon
+              name="search"
+              className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-lg text-inverse-on-surface/50"
+            />
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search pods…"
+              aria-label="Search pods"
+              className="w-full rounded-full border border-white/15 bg-white/10 py-3 pl-12 pr-11 text-label-lg text-white shadow-lift transition-[background-color,border-color,box-shadow] duration-200 ease-out placeholder:text-inverse-on-surface/50 hover:border-white/25 focus:border-primary focus:bg-white/15 focus:outline-none"
+            />
+            {query && (
+              <button
+                type="button"
+                onClick={() => setQuery('')}
+                aria-label="Clear search"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-full p-0.5 text-inverse-on-surface/50 transition-colors hover:bg-white/10 hover:text-white"
+              >
+                <Icon name="close" className="text-lg" />
+              </button>
+            )}
+          </form>
         </div>
       </section>
 
       {/* Sticky filter bar */}
       <div className="sticky top-0 z-30 border-b border-white/8 bg-inverse-surface py-4">
         <div className="shell">
-          <div className="flex items-center gap-3 overflow-x-auto pb-1">
-            <span className="shrink-0 text-label-md font-medium text-inverse-on-surface/40">Filter:</span>
+          <div className="flex flex-wrap items-center gap-2 md:gap-3">
+            <span className="hidden text-label-md font-medium text-inverse-on-surface/40 sm:inline">Filter:</span>
             {POD_FILTERS.map((f) => (
               <button
                 key={f}
@@ -182,15 +203,32 @@ export default function Pods() {
       {/* Pod grid */}
       <section className="bg-inverse-surface py-14">
         <div className="shell">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {podItems.map((it) =>
-              it.type === 'ad' ? (
-                <PodAdCard key={it.key} />
-              ) : (
-                <PodCard key={it.item.title} pod={it.item} />
-              ),
-            )}
-          </div>
+          {podItems.length === 0 ? (
+            <div className="py-16 text-center">
+              <Icon name="search" className="text-4xl text-inverse-on-surface/30" />
+              <p className="mt-3 text-body-lg text-inverse-on-surface/60">No pods match your search.</p>
+              <button
+                type="button"
+                onClick={() => {
+                  setQuery('')
+                  setFilter('All')
+                }}
+                className="mt-4 text-label-lg font-semibold text-primary-fixed-dim underline-offset-4 hover:underline"
+              >
+                Clear search &amp; filters
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {podItems.map((it) =>
+                it.type === 'ad' ? (
+                  <PodAdCard key={it.key} />
+                ) : (
+                  <PodCard key={it.item.title} pod={it.item} />
+                ),
+              )}
+            </div>
+          )}
 
           {/* Teacher CTA */}
           <div className="mt-16 bg-primary p-8 text-center">
@@ -199,7 +237,7 @@ export default function Pods() {
               Upload your own pods and reach thousands of Kenyan learners. Subject to verification and content review.
             </p>
             <Link
-              to="/teachers-trainers"
+              to="/create-account"
               className="mt-5 inline-flex items-center gap-2 bg-white px-6 py-3 font-bold uppercase tracking-wide text-primary transition-colors hover:bg-white/90"
             >
               <Icon name="co_present" className="text-base" />
